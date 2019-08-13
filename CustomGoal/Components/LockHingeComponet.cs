@@ -12,11 +12,13 @@ namespace CustomGoal
 {
     public class LockHingeComponent : GH_Component
     {
-
+        Mesh M;
+        double Strength;
+        Interval Range = Interval.Unset;
         public LockHingeComponent()
           : base("LockHinge", "LockHinge",
-              "Lock hinge angle in given range",
-              "Kangaroo", "Goals-Mesh")
+              "[Custom]:Lock hinge angle in given range",
+              "Kangaroo2", "Goals-Mesh")
         {
         }
 
@@ -37,6 +39,21 @@ namespace CustomGoal
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            M = new Mesh();
+
+            DA.GetData<Mesh>(0, ref M);
+            DA.GetData<Interval>(1, ref Range);
+            DA.GetData<double>(2, ref Strength);
+            List<List<Point3d>> PPS = CustomGoal.Goals.Util.HingeVertices(M);
+
+            List<GoalObject> goals = new List<GoalObject>();
+            foreach(List<Point3d> P in PPS)
+            {
+                goals.Add(new Goals.LockMeshAngle(P[0], P[1], P[2], P[3], Range, Strength));
+            }
+
+            DA.SetDataList(0, goals);
+            
         }
 
 

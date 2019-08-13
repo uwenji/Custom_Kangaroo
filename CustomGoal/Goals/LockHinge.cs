@@ -101,8 +101,5 @@ namespace CustomGoal.Goals
         }
 
     }
-    public double toRadian(double Angle)
-    {
-        return ((Angle % 360.0) / 360.0) * Math.PI * 2;
-    }
+    
 }
