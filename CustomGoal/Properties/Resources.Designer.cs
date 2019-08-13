@@ -63,9 +63,9 @@ namespace CustomGoal.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap DynamicBorder {
+        internal static System.Drawing.Bitmap borderGoal {
             get {
-                object obj = ResourceManager.GetObject("DynamicBorder", resourceCulture);
+                object obj = ResourceManager.GetObject("borderGoal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

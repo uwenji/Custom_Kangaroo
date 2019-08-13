@@ -57,7 +57,7 @@ namespace CustomGoal.Components
         {
             get
             {
-                return Properties.Resources.DynamicBorder;
+                return Properties.Resources.borderGoal;
             }
         }
 
