@@ -63,6 +63,16 @@ namespace CustomGoal.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DynamicBorder {
+            get {
+                object obj = ResourceManager.GetObject("DynamicBorder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap LockHinge {
             get {
                 object obj = ResourceManager.GetObject("LockHinge", resourceCulture);

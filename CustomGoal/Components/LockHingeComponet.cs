@@ -15,12 +15,13 @@ namespace CustomGoal
         Mesh M;
         double Strength;
         Interval Range = Interval.Unset;
+        List<List<Point3d>> PPS = new List<List<Point3d>>();
 
         GoalObject[] goals;
 
         public LockHingeComponent()
           : base("LockHinge", "LockHinge",
-              "[Custom]:Lock hinge angle in given range",
+              "[Custom]:Lock hinge angle in given range.\n\rby You-Wen Ji,ohisyouwen.ji@gmail.com",
               "Kangaroo2", "Goals-Mesh")
         {
         }
@@ -40,6 +41,11 @@ namespace CustomGoal
         }
 
 
+        protected override void AfterSolveInstance()
+        {
+            base.AfterSolveInstance();
+
+        }
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             M = new Mesh();
@@ -47,7 +53,7 @@ namespace CustomGoal
             DA.GetData<Mesh>(0, ref M);
             DA.GetData<Interval>(1, ref Range);
             DA.GetData<double>(2, ref Strength);
-            List<List<Point3d>> PPS = CustomGoal.Goals.Util.HingeVertices(M);
+            PPS = CustomGoal.Goals.Util.HingeVertices(M);
 
             goals = new GoalObject[PPS.Count];
 

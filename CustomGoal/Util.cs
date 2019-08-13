@@ -122,5 +122,35 @@ namespace CustomGoal.Goals
             bPlane.Origin = (longest.To - longest.From) / 2 + longest.From;
             return bPlane;
         }
+
+        //get deluanay mesh from points
+        public static Mesh pointsToDeluanayMesh(List<Point3d> pts)
+        {
+            //convert point3d to node2
+            //grasshopper requres that nodes are saved within a Node2List for Delaunay
+            Plane fitPlane = new Plane();
+            Plane.FitPlaneToPoints(pts, out fitPlane);
+            var nodes = new Grasshopper.Kernel.Geometry.Node2List();
+            for (int i = 0; i < pts.Count; i++)
+            {
+                double x, y = new double();
+                fitPlane.ClosestParameter(pts[i], out x, out y);
+                nodes.Append(new Grasshopper.Kernel.Geometry.Node2(x, y));
+            }
+
+            //solve Delaunay
+            Mesh delMesh = new Mesh();
+            var faces = new List<Grasshopper.Kernel.Geometry.Delaunay.Face>();
+
+            faces = Grasshopper.Kernel.Geometry.Delaunay.Solver.Solve_Faces(nodes, 1);
+
+            //output
+            delMesh = Grasshopper.Kernel.Geometry.Delaunay.Solver.Solve_Mesh(nodes, 1, ref faces);
+            for(int i = 0; i < delMesh.Vertices.Count; i++)
+            {
+                delMesh.Vertices.SetVertex(i, pts[i].X, pts[i].Y, pts[i].Z);
+            }
+            return delMesh;
+        }
     }
 }

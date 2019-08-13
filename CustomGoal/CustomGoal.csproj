@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\LockHingeComponet.cs" />
+    <Compile Include="Components\DynamicBorder.cs" />
     <Compile Include="CustomGoalInfo.cs" />
     <Compile Include="Goals\DynamicBorder.cs" />
     <Compile Include="Goals\LockHinge.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Artboard 15.png" />
     <Content Include="Resources\DynamicBorder.png" />
     <Content Include="Resources\LockHinge.png" />
   </ItemGroup>
