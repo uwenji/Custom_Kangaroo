@@ -36,6 +36,11 @@ namespace CustomGoal.Goals
         // Calculate
         public override void Calculate(List<KangarooSolver.Particle> p)
         {
+            /* Most code from Daniel Piker's Github K2Goal_Hinge
+            * only custom part is different
+            * reference:
+            * link:https://github.com/Dan-Piker/K2Goals/blob/master/Hinge.cs
+            */
             Point3d P0 = p[PIndex[0]].Position;
             Point3d P1 = p[PIndex[1]].Position;
             Point3d P2 = p[PIndex[2]].Position;
@@ -69,6 +74,8 @@ namespace CustomGoal.Goals
             double CurrentAngle = Vector3d.VectorAngle(Cross0, Cross1, new Plane(P0, V01));
             if (CurrentAngle > Math.PI) { CurrentAngle = CurrentAngle - 2 * Math.PI; }
             double AngleError = 0.0;
+            
+            //[customStart]:keep angle in range, 
             if (Range.IncludesParameter(CurrentAngle) != true)
             {
                 if (CurrentAngle - Range.T0 < Range.T1 - CurrentAngle)
@@ -76,7 +83,9 @@ namespace CustomGoal.Goals
                 else
                     AngleError = CurrentAngle - Range.T1;
             }
-
+            //[customEnd]
+            
+            //ref: Daniel Piker's Github K2Goal_Hinge, https://github.com/Dan-Piker/K2Goals/blob/master/Hinge.cs
             double InvL = 1.0 / Cross0.Length;
             double Cot0u = Dot0201 * InvL;
             double Cot0v = Dot2101 * InvL;
