@@ -66,6 +66,6 @@ public class MagnetGoal : GoalObject
         mass += p / (points.Count);
       }
 
-      return (mass - self);
+      return (mass - self)/points.Count;
     }
   }
