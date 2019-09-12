@@ -6,7 +6,7 @@ public class MagnetGoal : GoalObject
          */
     public double Strength;
     public double Radius;
-
+    public RTree rTree;
     //points order is z-like shape then using mesh as input
     public MagnetGoal(List<Point3d> P, double R, double K)
     {
@@ -23,44 +23,49 @@ public class MagnetGoal : GoalObject
     }
 
     // Calculate
+
     public override void Calculate(List<KangarooSolver.Particle> p)
     {
+      rTree = new RTree();
+
       int L = PIndex.Length;
 
       for (int i = 0; i < L; i++)
       {
+        rTree.Insert(p[PIndex[i]].Position, i);
         Move[i] = Vector3d.Zero;
         Weighting[i] = 0;
       }
 
-      for (int i = 0; i < (PIndex.Length - 1); i++)
+      for (int i = 0; i < L; i++)
       {
-        Point3d mass = new Point3d(0, 0, 0);
-        List<int> id = new List<int>();
-        int g = 0; //group count
-        for (int j = i; j < PIndex.Length; j++)
-        {
-          double distance = p[PIndex[i]].Position.DistanceTo(p[PIndex[j]].Position);
-          if (distance < Radius)
-          {
-            mass += p[PIndex[j]].Position;
-            g += 1;
-            id.Add(j);
-          }
-        }
+        KangarooSolver.Particle pos = p[i];
+        List<Point3d> Neighbours = new List<Point3d>();
 
-
-        if (g > 0)
-        {
-          for (int j = 0; j < id.Count; j++)
+        EventHandler<RTreeEventArgs> rTreeCallback =
+          (object sender, RTreeEventArgs args) =>
           {
-            Move[i] += (Move[id[j]] / g) * 0.1;
+          if (p[args.Id] != pos)
+          {
+            Neighbours.Add(p[args.Id].Position);
           }
-          mass = new Point3d(mass.X / g, mass.Y / g, mass.Z / g);
-          Move[i] += (mass - p[PIndex[i]].Position) / g;
-          Weighting[i] = Strength;
-        }
+
+          };
+
+        rTree.Search(new Sphere(pos.Position, Radius), rTreeCallback);
+        Weighting[i] = Strength;
+        if(Neighbours.Count > 0)
+          Move[i] = computeMagnet(pos.Position, Neighbours);
       }
     }
 
+    static public Vector3d computeMagnet(Point3d self, List<Point3d> points)
+    {
+      Point3d mass = Point3d.Origin;
+      foreach(Point3d p in points){
+        mass += p / (points.Count);
+      }
+
+      return (mass - self);
+    }
   }
